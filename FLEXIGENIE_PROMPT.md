@@ -3,8 +3,8 @@
 This is a **single self-contained message** designed to be pasted as your first (and only) message to FlexiGenie. Every section — design tokens, copy, form contract, layout spec — is inlined below so nothing gets truncated.
 
 **Before pasting:**
-1. Paste the entire content below (everything between the ``` fences, including the prose) into FlexiGenie.
-2. The image URLs below are already publicly hosted on the live deploy of this page — FlexiGenie can fetch them directly with no manual upload, no auth.
+1. Flip the repo at github.com/heynickquick/magic-inbox-lander to **public** (Settings → General → Danger Zone → Change repository visibility). Flip it back to private after FlexiGenie is done.
+2. Paste the entire content below (everything between the ``` fences, including the prose) into FlexiGenie.
 3. Open this URL in a separate tab so FlexiGenie can study the visual: `https://sa7m8wqkf3ehs.space.minimax.io`
 
 ---
@@ -81,16 +81,16 @@ WHAT NOT TO DO
   • Don't use blue/purple in the palette. Charcoal + mint only.
 
 ================================================================
-ASSET URLS (publicly hosted — FlexiGenie can fetch directly)
+ASSET URLS (raw GitHub — repo is public while FlexiGenie works)
 ================================================================
-  • Hero product image:
-    https://sa7m8wqkf3ehs.space.minimax.io/imgs/hero-product.png
-  • Avatar (section 8):
-    https://sa7m8wqkf3ehs.space.minimax.io/imgs/avatar.webp
+The repo at github.com/heynickquick/magic-inbox-lander has been
+flipped to public for the duration of this build. Flip it back to
+private once FlexiGenie is done.
 
-These URLs serve the exact same files that are checked into the source
-repo. The repo itself is private, so raw.githubusercontent.com URLs
-won't work without auth — but these public deploy URLs are open.
+  • Hero product image:
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/imgs/hero-product.png
+  • Avatar (section 8):
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/imgs/avatar.webp
 
 If FlexiFunnels requires images to be hosted on its own CDN, fetch
 both URLs above and re-upload them to the FlexiFunnels media library,
@@ -104,9 +104,10 @@ SOURCE FILES (FlexiGenie may consult for reference)
 ================================================================
   • Live visual reference (most important):
     https://sa7m8wqkf3ehs.space.minimax.io
-  • index.html (full source):
-    https://sa7m8wqkf3ehs.space.minimax.io/
-      (FlexiGenie can scrape this — the rendered HTML is what matters)
+  • index.html (full source — readable while repo is public):
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/index.html
+  • spec.md (design tokens):
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/spec.md
 
 You don't need to scrape the source repo directly — the inline spec
 below is self-contained. The live URL is your visual source of truth.
@@ -199,7 +200,7 @@ The page is NINE sections + footer. Build them in this exact order.
     microcopy:      "Your email stays private and you can leave whenever you want."
 
   RIGHT column:
-    https://sa7m8wqkf3ehs.space.minimax.io/imgs/hero-product.png
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/imgs/hero-product.png
     alt "Magic Inbox — The Complete Guide, your AI email assistant",
     max-width 440px, hidden below 960px viewport. Mint radial glow behind it.
 
@@ -300,7 +301,7 @@ The page is NINE sections + footer. Build them in this exact order.
 
 ----- SECTION 8 ----- Byline — two-column flex, single-column on mobile
   Avatar (LEFT): 130px circular frame, mint gradient border, contains:
-    https://sa7m8wqkf3ehs.space.minimax.io/imgs/avatar.webp
+    https://raw.githubusercontent.com/heynickquick/magic-inbox-lander/main/imgs/avatar.webp
   Body (RIGHT):
     p: "I'm Nick Quick. I write and publish my own work, and I run marketing campaigns for people who'd rather not run theirs."
     p: "I do it from Asunción, Paraguay, where the correct way to spend an afternoon is a shaded bench and a guampa of cold tereré."
