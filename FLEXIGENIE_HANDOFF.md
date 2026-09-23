@@ -6,6 +6,17 @@ Everything you need to paste into **FlexiGenie** (FlexiFunnels' AI page builder)
 > **Source HTML:** `index.html` in this repo (single file, all CSS/JS embedded).
 > **Form runtime contract (FlexiFunnels-native, must be preserved verbatim):** see §4.
 
+## ⚠️ Which file to use
+
+**Use `FLEXIGENIE_PROMPT.md`** — that's the single self-contained message designed to be pasted as ONE message into FlexiGenie. This file (`FLEXIGENIE_HANDOFF.md`) is the multi-section reference doc; the prompt-only version has everything inlined so it can't get truncated when pasted.
+
+## Files in this handoff
+
+| File | Purpose |
+|---|---|
+| `FLEXIGENIE_PROMPT.md` | **The single-message prompt.** Paste the content between the outer fences as your first (and only) message to FlexiGenie. |
+| `FLEXIGENIE_HANDOFF.md` | This doc — the longer-form reference broken into sections. Use if FlexiGenie wants to dig deeper into any specific area, or if you'd rather send the brief in multiple messages. |
+
 ---
 
 ## 1. The Prompt to Paste into FlexiGenie
