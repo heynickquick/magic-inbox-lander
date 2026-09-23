@@ -1,0 +1,27 @@
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Node / build artifacts
+node_modules/
+dist/
+.cache/
+
+# Python dev tooling (Playwright validators I used during build)
+*.py
+__pycache__/
+*.pyc
+
+# Local screenshot / debug artifacts
+_*.png
+shot-*.png
+validate-*.png
+section*.png
+mobile-hero.png
+
+# Local build / deployment metadata
+*.log
+.env
+.env.local

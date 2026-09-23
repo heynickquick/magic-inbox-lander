@@ -1,0 +1,1463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Magic Inbox: Your AI Email Assistant</title>
+<meta name="description" content="A free system for turning your inbox into an AI assistant.">
+<meta property="og:title" content="Magic Inbox: Your AI Email Assistant">
+<meta property="og:description" content="A free system for turning your inbox into an AI assistant.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Co-Writing With AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Magic Inbox: Your AI Email Assistant">
+<meta name="twitter:description" content="A free system for turning your inbox into an AI assistant.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@1,500;1,700&display=swap">
+
+<style>
+:root{
+  --bg:        #07070B;
+  --bg-1:      #0B0B12;
+  --bg-2:      #11111A;
+  --bg-warm:   #0D0D14;
+  --surface:   #1A1A26;
+  --surface-2: #232333;
+  --border:    #2A2A38;
+  --border-soft: #1F1F2C;
+  --mint:      #3DFFB0;
+  --mint-bright: #7CFFC8;
+  --mint-deep: #1FA876;
+  --mint-glow: rgba(61,255,176,0.45);
+  --mint-soft: rgba(61,255,176,0.08);
+  --ink:       #FAFAF7;
+  --ink-soft:  #D5D5DA;
+  --ink-mute:  #9A9AA8;
+  --ink-faint: #5A5A66;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:18px; line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+  font-weight:400;
+}
+@media(min-width:768px){body{font-size:19px;}}
+img,svg{display:block;max-width:100%;height:auto;}
+strong{font-weight:700;color:var(--ink);}
+
+.wrap{max-width:1280px;margin:0 auto;padding-left:24px;padding-right:24px;}
+@media(min-width:768px){.wrap{padding-left:40px;padding-right:40px;}}
+
+section{padding:88px 0;position:relative;z-index:1;}
+@media(min-width:768px){section{padding:140px 0;}}
+
+/* ============ TYPOGRAPHY ============ */
+.display{font-family:'Sora','Inter',sans-serif;font-weight:800;letter-spacing:-0.03em;line-height:1;}
+.h-display{font-family:'Sora','Inter',sans-serif;font-weight:800;letter-spacing:-0.03em;line-height:1.04;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--mint); font-weight:700;
+  margin:0 0 24px;
+  display:inline-flex; align-items:center; gap:14px;
+}
+.eyebrow::before{
+  content:""; width:28px; height:2px; background:var(--mint);
+  box-shadow:0 0 10px var(--mint-glow);
+  flex:none;
+}
+h1.h-display{
+  font-size:clamp(42px,5.4vw,76px);
+  margin:0 0 28px;
+}
+h2.h-display{
+  font-size:clamp(30px,4.2vw,56px);
+  margin:0 0 32px;
+  letter-spacing:-0.025em;
+}
+.gradient-text{
+  background:linear-gradient(135deg,var(--mint) 0%,var(--mint-bright) 50%,var(--mint) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.serif-accent{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;}
+
+p{margin:0 0 1.2em;max-width:62ch;color:var(--ink-soft);font-size:1.0625em;}
+p.lead{font-size:1.18em;line-height:1.65;color:var(--ink-soft);font-weight:400;}
+p:last-child{margin-bottom:0;}
+.micro{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-mute);line-height:1.55;margin:0;}
+
+.cta-mint{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  position:relative; overflow:hidden;
+  padding:16px 28px;
+  font:700 16px 'Inter',sans-serif; letter-spacing:0.005em;
+  color:#001510; background:var(--mint);
+  border:none; border-radius:14px; cursor:pointer;
+  box-shadow:
+    0 0 0 1px rgba(61,255,176,0.4),
+    0 10px 30px -8px var(--mint-glow),
+    0 0 40px -10px var(--mint-glow),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s;
+  text-decoration:none;
+}
+.cta-mint::after{
+  content:""; position:absolute; top:0; bottom:0; left:-40%;
+  width:30%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);
+  transform:skewX(-18deg); animation:shine 4.5s ease-in-out infinite;
+}
+@keyframes shine{0%,40%{transform:translateX(0) skewX(-18deg);}100%{transform:translateX(380%) skewX(-18deg);}}
+.cta-mint:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(61,255,176,0.6),0 14px 36px -6px var(--mint-glow),0 0 60px -10px var(--mint-glow),inset 0 1px 0 rgba(255,255,255,0.45);}
+.cta-mint svg{width:14px;height:14px;flex:none;}
+.cta-mint svg.rev{transform:scaleX(-1);}
+
+.cta-ghost{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:16px 28px;
+  font:700 16px 'Inter',sans-serif;
+  color:var(--ink);
+  background:transparent;
+  border:1px solid var(--border); border-radius:14px; cursor:pointer;
+  text-decoration:none;
+  transition:border-color .2s, background .2s;
+}
+.cta-ghost:hover{border-color:var(--mint);background:var(--mint-soft);}
+
+/* ============ HERO ============ */
+header.hero{
+  position:relative; z-index:1; padding:18px 0 40px;
+  background:
+    radial-gradient(ellipse 70% 60% at 75% 30%,rgba(61,255,176,0.16) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 25% 80%,rgba(61,255,176,0.05) 0%,transparent 55%),
+    var(--bg);
+  overflow:hidden;
+  min-height:100vh;
+  display:flex; align-items:center;
+}
+header.hero::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, var(--mint) 0%, transparent 60%),
+    radial-gradient(1px 1px at 28% 65%, var(--mint-bright) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 78% 18%, var(--mint) 0%, transparent 60%),
+    radial-gradient(1px 1px at 88% 78%, var(--mint-bright) 0%, transparent 60%),
+    radial-gradient(1px 1px at 55% 88%, var(--mint) 0%, transparent 60%);
+  opacity:.5;
+  animation:stars 6s ease-in-out infinite alternate;
+}
+@keyframes stars{0%{opacity:.4}100%{opacity:.65}}
+
+.hero-grid{
+  display:grid; gap:40px;
+  grid-template-columns:1fr;
+  align-items:center;
+  width:100%;
+}
+@media(min-width:960px){
+  .hero-grid{grid-template-columns:1.15fr 0.85fr;gap:48px;}
+}
+
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:24px 0; margin-bottom:64px;
+  position:relative; z-index:2;
+}
+.nav-brand{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px; font-weight:700;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+}
+.nav-brand .dot{
+  display:inline-block; width:8px; height:8px;
+  background:var(--mint); border-radius:50%;
+  margin-right:10px; vertical-align:middle;
+  box-shadow:0 0 12px var(--mint-glow);
+}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{color:var(--ink-mute);font-size:14px;text-decoration:none;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--mint);}
+
+.hero-grid{display:grid; gap:40px;grid-template-columns:1fr;align-items:center;width:100%;}
+@media(min-width:960px){.hero-grid{grid-template-columns:1.15fr 0.85fr;gap:48px;}}
+.hero-proof{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:24px 0 24px;
+  padding:0;
+  list-style:none;
+  max-width:560px;
+}
+.hero-proof li{
+  position:relative;
+  overflow:hidden;
+  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+  padding:12px 14px 12px 38px;
+  border-radius:12px;
+  color:var(--ink);
+  background:linear-gradient(135deg,rgba(61,255,176,0.18) 0%,rgba(61,255,176,0.04) 100%);
+  border:1.5px solid rgba(61,255,176,0.45);
+  letter-spacing:0.04em;
+  line-height:1.35;
+  white-space:normal;
+  box-shadow:
+    0 0 24px -6px var(--mint-glow),
+    inset 0 1px 0 rgba(61,255,176,0.18);
+  transition:transform .25s, box-shadow .25s, border-color .25s;
+}
+.hero-proof li::before{
+  content:"";
+  position:absolute;
+  left:10px; top:50%; transform:translateY(-50%);
+  width:20px; height:20px;
+  border-radius:50%;
+  background:var(--mint);
+  box-shadow:0 0 12px var(--mint-glow);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23001510' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  background-size:62% 62%;
+  background-repeat:no-repeat;
+  background-position:center;
+  flex:none;
+}
+.hero-proof li::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,0.32) 50%,transparent 70%);
+  transform:translateX(-100%);
+  animation:proof-shimmer 3.2s ease-in-out infinite;
+  pointer-events:none;
+}
+.hero-proof li:nth-child(2)::after{animation-delay:.6s;}
+.hero-proof li:nth-child(3)::after{animation-delay:1.2s;}
+.hero-proof li:nth-child(4)::after{animation-delay:1.8s;}
+@keyframes proof-shimmer{
+  0%,100%{transform:translateX(-100%)}
+  50%{transform:translateX(120%)}
+}
+.hero-proof li:hover{
+  transform:translateY(-2px);
+  border-color:rgba(61,255,176,0.8);
+  box-shadow:0 6px 24px -4px var(--mint-glow),0 0 36px -8px var(--mint-glow),inset 0 1px 0 rgba(61,255,176,0.25);
+}
+
+.optin{margin:0 0 18px; max-width:560px;}
+.optin-cta{margin:0 0 14px;}
+.optin-cta strong{display:block;font:600 18px 'Inter',sans-serif;color:var(--ink);letter-spacing:-0.01em;line-height:1.3;}
+.optin-cta span{display:block;margin-top:6px;font-size:14px;color:var(--ink-mute);line-height:1.45;}
+.optin-cta .arrow-down{
+  display:inline-block; margin-left:8px; transform:translateY(2px);
+  color:var(--mint);
+}
+
+/* Form fields — match FlexiFunnels structure exactly */
+.optin label{display:block;font-size:14px;font-weight:600;margin:0 0 8px;color:var(--ink-soft);}
+.optin input,
+.optin select,
+.optin textarea{
+  display:block; width:100%; height:54px; padding:0 18px;
+  font:500 16px 'Inter',sans-serif;
+  color:var(--ink);
+  background:var(--surface) !important;
+  border:1.5px solid var(--border) !important;
+  border-radius:12px !important;
+  transition:border-color .2s, box-shadow .2s;
+}
+.optin input::placeholder{color:var(--ink-faint);}
+.optin input:focus,
+.optin select:focus,
+.optin textarea:focus{
+  outline:none;
+  border-color:var(--mint) !important;
+  box-shadow:0 0 0 3px rgba(61,255,176,0.15),0 0 30px -8px var(--mint-glow);
+}
+/* FlexiFunnels expects these classes to look right too */
+.flexi-vform-box.ff-orderform-theme{
+  width:100%; max-width:560px; margin:0;
+}
+:where(.ff-orderform-theme) input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]),
+:where(.ff-orderform-theme) select,
+:where(.ff-orderform-theme) textarea{
+  width:100%; box-sizing:border-box;
+  padding:14px 18px; margin:0 0 14px 0;
+  font-size:16px; line-height:1.4; color:var(--ink);
+  background:var(--surface) !important;
+  border:1.5px solid var(--border) !important;
+  border-radius:12px !important;
+}
+:where(.ff-orderform-theme) input::placeholder,
+:where(.ff-orderform-theme) textarea::placeholder{
+  color:var(--ink-faint); opacity:1;
+}
+.optin-native .ft-form-btn{
+  display:flex !important; align-items:center; justify-content:center;
+  width:100% !important; min-height:54px; margin-top:6px; padding:16px 24px !important;
+  font:700 16px 'Inter',sans-serif !important; letter-spacing:0.005em;
+  color:#001510 !important;
+  background:var(--mint) !important;
+  border:none !important; border-radius:14px !important;
+  box-shadow:
+    0 0 0 1px rgba(61,255,176,0.4),
+    0 10px 30px -8px var(--mint-glow),
+    0 0 40px -10px var(--mint-glow),
+    inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  text-decoration:none !important;
+  position:relative; overflow:hidden;
+  transition:transform .2s, box-shadow .2s;
+}
+.optin-native .ft-form-btn::after{
+  content:""; position:absolute; top:0; bottom:0; left:-40%;
+  width:30%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);
+  transform:skewX(-18deg); animation:shine 4.5s ease-in-out infinite;
+}
+.optin-native .ft-form-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 0 1px rgba(61,255,176,0.6),0 14px 36px -6px var(--mint-glow),0 0 60px -10px var(--mint-glow) !important;
+}
+.optin-native .ft-form-btn .ffbtnmaintxt{display:flex;align-items:center;justify-content:center;gap:10px;}
+.optin-native .ft-form-btn .ffbtnmaintxt::after{
+  content:"→"; margin-left:2px; font-weight:700;
+}
+.optin .micro{margin-top:14px;}
+.ff-hidden-encharge{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* ============ HERO PRODUCT IMAGE ============ */
+.hero-product{
+  position:relative;
+  aspect-ratio: 4/5;
+  width:100%;
+  max-width:520px;
+  margin-left:auto;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:20px;
+  overflow:visible;
+}
+.hero-product-img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:20px;
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,0.55)) drop-shadow(0 0 80px rgba(61,255,176,0.25));
+}
+/* Floor reflection */
+.hero-product::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:40%;
+  background:linear-gradient(180deg,transparent 0%,rgba(61,255,176,0.08) 50%,transparent 100%);
+  pointer-events:none;
+  display:none; /* not needed for image */
+}
+/* Sparkles around — subtle, not noisy */
+.sparkle{
+  position:absolute;
+  color:var(--mint);
+  filter:drop-shadow(0 0 6px var(--mint-glow));
+  animation:twinkle 5s ease-in-out infinite;
+  pointer-events:none;
+  opacity:.6;
+}
+.sparkle.s1{top:12%; left:14%; animation-delay:0s;}
+.sparkle.s2{top:22%; right:18%; animation-delay:1.2s;}
+.sparkle.s3{bottom:24%; left:8%; animation-delay:2.4s;}
+@keyframes twinkle{0%,100%{opacity:.4;transform:scale(.85) rotate(0)}50%{opacity:.85;transform:scale(1.1) rotate(12deg)}}
+
+/* Phone — legacy CSS composition (kept for reference, hidden when image is used) */
+.phone, .book, .robot, .float-env, .hero-product .sparkle{display:none;}
+
+/* ============ SECTION DIVIDERS ============ */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--border) 20%,var(--border) 80%,transparent 100%);
+  margin:0;
+}
+
+/* ============ SECTION 2 — STACK ============ */
+.split{display:grid;gap:48px;align-items:center;}
+@media(min-width:900px){.split{grid-template-columns:1.05fr 0.95fr;gap:64px;}}
+.split-receipt{grid-template-columns:1.15fr 0.85fr;}
+.split-reverse{display:grid;gap:32px;align-items:center;grid-template-columns:1fr;}
+@media(min-width:640px){
+  /* Two-column even at tablet widths — sticky works cleanly when envelope & copy are side by side */
+  .split-reverse{grid-template-columns:1fr 1fr;gap:32px;}
+}
+@media(min-width:900px){.split-reverse{grid-template-columns:0.95fr 1.05fr;gap:64px;}}
+.split-reverse > *:nth-child(1){order:2;}
+.split-reverse > *:nth-child(2){order:1;}
+.split-reverse > .pull{order:3;}
+
+.illust-stack{
+  position:relative;
+  aspect-ratio:1;
+  width:100%; max-width:520px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center;
+}
+@media(max-width:899px){
+  /* At tablet/mobile single-column widths, the envelope shouldn't dominate the viewport.
+     Tighter max-width + a slim aspect ratio keeps it present but not overwhelming. */
+  .illust-stack{
+    max-width:320px;
+    aspect-ratio:1.1/1;
+  }
+  .env-stack{width:100%;}
+  .env-stack .env-card{width:58%;}
+}
+.env-stack{
+  position:relative; width:80%; aspect-ratio:1;
+  background:radial-gradient(ellipse at center,rgba(61,255,176,0.18) 0%,transparent 70%);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.env-stack .env-card{
+  position:absolute;
+  width:62%;
+  aspect-ratio:1.6/1;
+  background:linear-gradient(180deg,#1a1a26 0%,#11111a 100%);
+  border:1px solid var(--border);
+  border-radius:10px;
+  box-shadow:0 14px 30px -10px rgba(0,0,0,0.7),0 0 30px -10px var(--mint-glow);
+  overflow:hidden;
+  transition:transform .5s cubic-bezier(.2,.7,.3,1);
+}
+.env-stack .env-card::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:32%;
+  background:linear-gradient(180deg,rgba(61,255,176,0.06),transparent);
+  border-bottom:1px solid var(--border-soft);
+}
+.env-stack .env-card::after{
+  content:""; position:absolute; left:8%; right:8%; top:8%; height:18%;
+  background:linear-gradient(90deg,#2a2a38 0%,#2a2a38 60%,transparent 100%);
+  border-radius:3px;
+}
+.env-stack .env-card .lines{padding:38% 8% 0;display:flex;flex-direction:column;gap:5px;}
+.env-stack .env-card .lines span{height:4px;background:#22222e;border-radius:2px;}
+.env-stack .env-card .lines span:nth-child(1){width:75%}
+.env-stack .env-card .lines span:nth-child(2){width:55%}
+.env-stack .env-card .lines span:nth-child(3){width:65%}
+.env-stack .env-card.c1{transform:translate(-20%,-30%) rotate(-8deg);animation:drop1 .8s .1s cubic-bezier(.2,.7,.3,1.1) both;}
+.env-stack .env-card.c2{transform:translate(-15%,-15%) rotate(-4deg);animation:drop2 .8s .2s cubic-bezier(.2,.7,.3,1.1) both;}
+.env-stack .env-card.c3{transform:translate(-10%,0%)  rotate(-1deg);animation:drop3 .8s .3s cubic-bezier(.2,.7,.3,1.1) both;}
+.env-stack .env-card.c4{transform:translate(-5%,15%)  rotate(2deg); animation:drop4 .8s .4s cubic-bezier(.2,.7,.3,1.1) both;}
+.env-stack .env-card.c5{transform:translate(0%,30%)   rotate(5deg); animation:drop5 .8s .5s cubic-bezier(.2,.7,.3,1.1) both;}
+@keyframes drop1{from{opacity:0;transform:translate(-40%,-90%) rotate(-20deg)}to{transform:translate(-20%,-30%) rotate(-8deg)}}
+@keyframes drop2{from{opacity:0;transform:translate(-40%,-70%) rotate(-12deg)}to{transform:translate(-15%,-15%) rotate(-4deg)}}
+@keyframes drop3{from{opacity:0;transform:translate(-40%,-50%) rotate(-6deg)} to{transform:translate(-10%,0%)  rotate(-1deg)}}
+@keyframes drop4{from{opacity:0;transform:translate(-40%,-30%) rotate(0deg)}  to{transform:translate(-5%,15%)   rotate(2deg)}}
+@keyframes drop5{from{opacity:0;transform:translate(-40%,-10%) rotate(6deg)}  to{transform:translate(0%,30%)    rotate(5deg)}}
+.env-stack .pulse-ring{
+  position:absolute; inset:0;
+  border-radius:50%;
+  border:1.5px solid rgba(61,255,176,0.2);
+  animation:pulse 3.5s ease-out infinite;
+}
+.env-stack .pulse-ring.r2{animation-delay:1.2s;}
+.env-stack .pulse-ring.r3{animation-delay:2.4s;}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.4);opacity:0}}
+
+/* Sticky scroll-with-reader behavior for the envelope illustration.
+   Pins during scroll so the image stays visible across the full section height.
+   Active from tablet widths up — desktop two-column AND tablet single-column both benefit. */
+@media(min-width:640px){
+  .illust-stack-sticky{
+    position:sticky;
+    top:18vh;
+    align-self:start;
+  }
+}
+
+.pull{
+  grid-column:1/-1;
+  margin-top:72px; text-align:center; position:relative;
+}
+.pull::before{
+  content:""; display:block; width:64px; height:2px; background:var(--mint);
+  margin:0 auto 32px;
+  box-shadow:0 0 12px var(--mint-glow);
+}
+.pull-quote{
+  font-family:'Fraunces',Georgia,serif;
+  font-style:italic; font-weight:500;
+  font-size:clamp(24px,4vw,38px); line-height:1.3; letter-spacing:-0.01em;
+  max-width:24ch; margin:0 auto;
+  color:var(--ink);
+}
+.pull-quote::before,.pull-quote::after{content:"";display:inline-block;width:14px;height:14px;background:var(--mint);margin:0 10px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);vertical-align:middle;opacity:.7;}
+
+/* ============ SECTION 3 — TASKS PANEL ============ */
+.tasks-section{background:radial-gradient(ellipse at center top,rgba(61,255,176,0.06) 0%,transparent 50%);}
+.panel{
+  background:linear-gradient(180deg,rgba(26,26,38,0.6) 0%,rgba(17,17,26,0.6) 100%);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:32px;
+  margin:40px 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 30px 80px -20px rgba(0,0,0,0.5);
+}
+@media(min-width:768px){.panel{padding:44px 48px;}}
+.tasks{list-style:none;margin:0;padding:0;}
+.tasks li{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border-soft);}
+.tasks li:last-child{border-bottom:none;}
+.tasks li:first-child{padding-top:0;}
+.tasks li:last-child{padding-bottom:0;}
+.marker{
+  width:32px; height:32px; flex:none; margin-top:2px;
+  background:var(--mint-soft);
+  border:1px solid rgba(61,255,176,0.35);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--mint);
+  box-shadow:0 0 16px -4px var(--mint-glow);
+}
+.marker svg{width:16px;height:16px;}
+.tasks .t{color:var(--ink);font-size:16px;line-height:1.55;}
+.tasks .t strong{color:var(--mint);font-weight:700;}
+
+/* ============ SECTION 4 — RECEIPT ============ */
+.illust-receipt{
+  position:relative;
+  aspect-ratio:3/4;
+  max-width:340px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center;
+}
+.receipt{
+  width:75%;
+  background:linear-gradient(180deg,#1a1a26 0%,#0e0e16 100%);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:24px 20px;
+  position:relative;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px; line-height:1.8;
+  color:var(--ink-soft);
+  box-shadow:
+    0 30px 60px -20px rgba(0,0,0,0.7),
+    0 0 60px -10px var(--mint-glow),
+    inset 0 0 30px rgba(61,255,176,0.05);
+}
+/* Zigzag edges */
+.receipt::before,.receipt::after{
+  content:""; position:absolute; left:0; right:0; height:8px;
+  background:
+    radial-gradient(circle at 4px 4px,var(--bg) 3px,transparent 3.5px) repeat-x;
+  background-size:8px 8px;
+}
+.receipt::before{top:-4px;}
+.receipt::after{bottom:-4px;}
+.receipt .item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--border-soft);}
+.receipt .item:last-of-type{border-bottom:1px solid var(--mint);}
+.receipt .total{margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;font-weight:700;color:var(--mint);}
+.receipt .label{color:var(--ink-mute);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;display:block;}
+
+/* ============ SECTION 5 — EMAIL BCC ============ */
+.inline-art{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
+@media(min-width:768px){.inline-art{flex-wrap:nowrap;}}
+.email-mock{
+  flex:none;
+  width:100%; max-width:260px;
+  background:linear-gradient(180deg,#1a1a26 0%,#0e0e16 100%);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 20px 50px -10px rgba(0,0,0,0.6),0 0 40px -10px var(--mint-glow);
+}
+.email-mock .head{
+  display:flex; align-items:center; gap:6px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--border-soft);
+  background:rgba(0,0,0,0.2);
+}
+.email-mock .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);}
+.email-mock .dot.r{background:#ff5f57;}
+.email-mock .dot.y{background:#febc2e;}
+.email-mock .dot.g{background:#28c840;}
+.email-mock .from{padding:18px 14px 12px;}
+.email-mock .from .who{font:700 14px 'Inter',sans-serif;color:var(--ink);}
+.email-mock .from .sub{font:12px 'JetBrains Mono',monospace;color:var(--ink-mute);margin-top:4px;}
+.email-mock .body{padding:0 14px 14px;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+.email-mock .bcc{
+  margin:14px;
+  padding:10px 12px;
+  background:rgba(61,255,176,0.06);
+  border:1px dashed rgba(61,255,176,0.4);
+  border-radius:8px;
+  font:700 12px 'JetBrains Mono',monospace;
+  color:var(--mint);
+  text-align:center;
+  letter-spacing:0.06em;
+}
+.inline-copy{flex:1 1 280px;min-width:0;}
+.inline-copy p{margin:0 0 14px;}
+.inline-copy p:last-child{margin-bottom:0;}
+@media(min-width:768px){
+  .inline-art{align-items:flex-start;}
+}
+
+/* ============ SECTION 6 — SUBSTACK ============ */
+.notes-grid{display:grid;gap:48px;align-items:center;}
+@media(min-width:900px){.notes-grid{grid-template-columns:0.95fr 1.05fr;gap:64px;}}
+
+/* Task panel — clean inbox view of emails being processed */
+.task-panel{
+  width:100%;
+  max-width:480px;
+  margin:0 auto;
+  background:linear-gradient(180deg,rgba(26,26,38,0.7) 0%,rgba(14,14,22,0.7) 100%);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,0.6),0 0 60px -10px var(--mint-glow),inset 0 1px 0 rgba(255,255,255,0.04);
+  position:relative;
+}
+.task-panel::before{
+  content:""; position:absolute; left:20px; right:20px; top:42px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);
+}
+.tp-head{
+  display:flex; align-items:center; gap:10px;
+  font:700 11px 'JetBrains Mono',monospace;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--mint);
+  margin-bottom:14px;
+}
+.tp-head .pulse{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--mint);
+  box-shadow:0 0 12px var(--mint-glow);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.tp-row{
+  display:grid;
+  grid-template-columns:1fr 28px auto;
+  align-items:center;
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border-soft);
+}
+.tp-row:last-child{border-bottom:none;}
+.tp-row .tp-from{
+  display:flex; align-items:center; gap:12px;
+  min-width:0;
+}
+.tp-avatar{
+  width:34px; height:34px; border-radius:9px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  font:700 14px 'Inter',sans-serif;
+  background:var(--mint-soft);
+  color:var(--mint);
+  border:1px solid rgba(61,255,176,0.3);
+}
+.tp-avatar.alt{
+  background:rgba(255,103,25,0.12);
+  color:#ff7a45;
+  border-color:rgba(255,103,25,0.3);
+}
+.tp-avatar.alt2{
+  background:rgba(125,140,255,0.12);
+  color:#9aa6ff;
+  border-color:rgba(125,140,255,0.3);
+}
+.tp-from .who{font:600 14px 'Inter',sans-serif;color:var(--ink);line-height:1.2;}
+.tp-from .sub{font:11px 'JetBrains Mono',monospace;color:var(--ink-mute);margin-top:2px;letter-spacing:0.02em;}
+.tp-arrow{
+  color:var(--mint);
+  filter:drop-shadow(0 0 6px var(--mint-glow));
+}
+.tp-arrow svg{width:28px;height:18px;}
+.tp-result{
+  display:inline-flex; align-items:center; gap:6px;
+  font:700 12px 'JetBrains Mono',monospace;
+  color:var(--mint);
+  background:var(--mint-soft);
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid rgba(61,255,176,0.3);
+  letter-spacing:0.04em;
+}
+.tp-result svg{width:12px;height:12px;}
+
+/* ============ SECTION 7 — CLOSE ============ */
+.close{
+  text-align:center; padding-top:120px; padding-bottom:120px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,rgba(61,255,176,0.18) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 80% at 50% 100%,rgba(31,168,118,0.3) 0%,transparent 60%),
+    linear-gradient(180deg,#08080f 0%,#0a0a14 50%,#07070b 100%);
+  position:relative; overflow:hidden;
+}
+.close::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 18%, var(--mint) 0%, transparent 60%),
+    radial-gradient(1px 1px at 24% 65%, var(--mint-bright) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 78% 22%, var(--mint) 0%, transparent 60%),
+    radial-gradient(1px 1px at 92% 78%, var(--mint-bright) 0%, transparent 60%),
+    radial-gradient(1px 1px at 50% 88%, var(--mint) 0%, transparent 60%);
+  opacity:.6;
+}
+.close .wrap{position:relative;z-index:1;max-width:780px;}
+.close .h-display{margin-bottom:24px;}
+.close .sub{font-size:20px;line-height:1.55;color:var(--ink-soft);margin:0 auto 36px;max-width:60ch;}
+
+/* ============ SECTION 8 — BYLINE ============ */
+.byline{display:flex;flex-direction:column;align-items:center;gap:28px;text-align:center;}
+@media(min-width:768px){.byline{flex-direction:row;align-items:center;gap:40px;text-align:left;}}
+.avatar-panel{
+  width:130px; height:130px; border-radius:50%;
+  background:linear-gradient(135deg,var(--mint) 0%,var(--mint-deep) 100%);
+  padding:4px;
+  flex:none;
+  box-shadow:0 0 40px var(--mint-glow);
+}
+.avatar-panel img{width:100%;height:100%;border-radius:50%;display:block;background:var(--bg-2);}
+.byline-body p{color:var(--ink-soft);}
+.byline-body p:last-child{color:var(--mint);font-style:italic;font-family:'Fraunces',Georgia,serif;}
+
+/* ============ SECTION 9 — NUDGE ============ */
+.nudge{text-align:center;padding:96px 0;}
+.nudge .h-display{margin-bottom:16px;}
+.nudge .sub{font-size:18px;line-height:1.55;color:var(--ink-soft);margin:0 auto 32px;}
+.nudge .micro{margin-top:16px;}
+
+/* Centered microcopy with mint star sparkles on either side */
+.micro-stars{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin:16px auto 0;
+  max-width:fit-content;
+}
+.micro-stars .micro{margin:0;}
+.micro-star{
+  color:var(--mint);
+  font-size:14px;
+  line-height:1;
+  filter:drop-shadow(0 0 8px var(--mint-glow));
+  animation:star-pulse 2.4s ease-in-out infinite;
+}
+.micro-star:last-child{animation-delay:1.2s;}
+@keyframes star-pulse{
+  0%,100%{opacity:.6;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1.18)}
+}
+
+/* ============ FOOTER ============ */
+.foot{padding:32px 0 48px;text-align:center;border-top:1px solid var(--border-soft);margin-top:48px;}
+.foot a{color:var(--ink-mute);font-size:13px;text-decoration:none;font-family:'JetBrains Mono',monospace;}
+.foot a:hover{color:var(--mint);}
+
+/* ============ UTILITIES ============ */
+[data-scroll-to-form]{cursor:pointer;font-family:inherit;}
+.hl-sweep{background-image:none;color:var(--mint);position:relative;}
+.hl-sweep::after{content:"";}
+
+/* ============ FLEXIFUNNELS COMPAT ============ */
+.d-none{display:none!important}
+.w-100{width:100%}
+.mt-3{margin-top:1rem}
+.text-center{text-align:center}
+
+/* ============ RESPONSIVE TUNING ============ */
+@media(max-width:767px){
+  .hero-product{aspect-ratio:1;}
+  .phone{width:32%;right:4%;}
+  .book{width:42%;left:6%;}
+  .robot{width:30%;left:34%;}
+  .float-env{width:18%;}
+  .pull-quote{font-size:22px;}
+  .flow-art{flex-wrap:wrap;}
+  .flow-arrow svg{width:24px;height:24px;}
+  .nav-links{display:none;}
+}
+
+/* ============ ENTRANCE ANIMATIONS ============ */
+/* No opacity-0 initial state — content always visible. Animations are nicety only. */
+
+/* ============ HERO COPY (left column) ============ */
+.hero-copy{max-width:680px;}
+.hero-copy .eyebrow{margin-bottom:18px;}
+.hero-copy .eyebrow::after{
+  content:""; width:24px; height:2px; background:var(--mint);
+  box-shadow:0 0 10px var(--mint-glow); flex:none;
+}
+.hero-copy h1.h-display{
+  font-size:clamp(36px,4.4vw,60px);
+  line-height:1.02;
+  margin-bottom:18px;
+}
+.hero-copy .lead{font-size:1rem;line-height:1.55;margin-bottom:18px;}
+.hero-copy .hero-proof{margin:0 0 22px;gap:8px;}
+.hero-copy .hero-proof li{font-size:10px;padding:10px 12px 10px 32px;}
+.hero-copy .optin{margin:0;}
+.hero-copy .optin-cta{margin-bottom:10px;}
+.hero-copy .optin-cta strong{font-size:16px;}
+.hero-copy .optin-cta span{font-size:13px;margin-top:2px;}
+.hero-copy .micro{margin-top:10px;font-size:12px;}
+.optin input, .optin select, .optin textarea{
+  height:48px !important;
+  padding:0 16px !important;
+  font-size:15px !important;
+}
+:where(.ff-orderform-theme) input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]),
+:where(.ff-orderform-theme) select,
+:where(.ff-orderform-theme) textarea{
+  height:48px !important;
+  padding:0 16px !important;
+  font-size:15px !important;
+  margin:0 0 10px 0 !important;
+}
+.optin-native .ft-form-btn{
+  min-height:48px !important;
+  padding:14px 22px !important;
+  font-size:15px !important;
+}
+
+/* ============ HERO PRODUCT IMAGE (right column) ============ */
+.hero-product{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  margin:0 auto;
+  isolation:isolate;
+}
+.hero-product-glow{
+  position:absolute;
+  inset:-12% -10% -5% -10%;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 60%,rgba(61,255,176,0.32) 0%,transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 100%,rgba(31,168,118,0.4) 0%,transparent 70%);
+  filter:blur(24px);
+  z-index:-1;
+  animation:glow-pulse 6s ease-in-out infinite alternate;
+}
+@keyframes glow-pulse{0%{opacity:.7}100%{opacity:1}}
+.hero-product-img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:18px;
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,0.55)) drop-shadow(0 0 60px rgba(61,255,176,0.3));
+  animation:float-img 6s ease-in-out infinite;
+}
+@keyframes float-img{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+@media(max-width:959px){
+  /* Hide hero product image on mobile — the form is the focus above the fold.
+     The image lives in the desktop hero only. */
+  .hero-product{display:none;}
+  .hero-copy{max-width:100%;}
+  .hero-copy .hero-proof{gap:8px;}
+  .hero-copy .hero-proof li{font-size:11px;padding:11px 12px 11px 34px;}
+  .hero-copy .hero-proof li::before{width:18px;height:18px;left:9px;}
+  .hero-copy .lead{font-size:0.95rem;line-height:1.5;margin-bottom:14px;}
+  .hero-copy h1.h-display{font-size:clamp(28px,7.5vw,40px);line-height:1.05;margin-bottom:12px;}
+  .hero-copy .eyebrow{margin-bottom:14px;font-size:11px;letter-spacing:0.16em;}
+  .optin-cta{margin-bottom:10px;}
+  .optin-cta strong{font-size:17px;}
+  .optin-cta span{margin-top:3px;font-size:13px;}
+}
+
+/* ============ PARALLAX DECORATIVE LAYERS ============
+   Each section gets a fixed background gradient that creates a subtle parallax
+   as the user scrolls. Combined with floating mint icons in the document flow
+   that bob gently, this fills the "empty" space. */
+section{
+  background-attachment:fixed;
+  background-size:cover;
+}
+@media(max-width:900px){
+  section{background-attachment:scroll;}
+}
+/* Section 2 needs scroll-attachment (not fixed) so its sticky envelope illustration works.
+   `background-attachment:fixed` creates a new containing block that breaks position:sticky. */
+section#s2{background-attachment:scroll;}
+section#s2{
+  background-image:radial-gradient(ellipse 60% 80% at 80% 30%,rgba(61,255,176,0.08) 0%,transparent 60%);
+}
+section#s3{
+  background-image:radial-gradient(ellipse 60% 80% at 20% 70%,rgba(61,255,176,0.06) 0%,transparent 60%);
+}
+section#s4{
+  background-image:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(31,168,118,0.08) 0%,transparent 60%);
+}
+section#s5{
+  background-image:radial-gradient(ellipse 60% 80% at 30% 30%,rgba(61,255,176,0.05) 0%,transparent 60%);
+}
+section#s6{
+  background-image:radial-gradient(ellipse 60% 80% at 70% 70%,rgba(61,255,176,0.06) 0%,transparent 60%);
+}
+
+/* Floating decorative icons embedded in section flow */
+.float-icon{
+  position:absolute;
+  width:36px;height:36px;
+  color:var(--mint);
+  opacity:.25;
+  filter:drop-shadow(0 0 10px var(--mint-glow));
+  pointer-events:none;
+  z-index:0;
+  animation:float-icon 8s ease-in-out infinite;
+}
+.float-icon svg{width:100%;height:100%;display:block;}
+@keyframes float-icon{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-16px) rotate(8deg)}
+}
+@media(max-width:900px){.float-icon{display:none;}}
+
+/* Hide parallax on mobile (too small to enjoy + perf) */
+@media(max-width:900px){
+  .parallax-bg{display:none;}
+}
+
+/* ============ FOOTER ============ */
+.foot{
+  padding:80px 0 48px;
+  border-top:1px solid var(--border-soft);
+  margin-top:60px;
+  position:relative;
+  z-index:1;
+}
+.foot-card{
+  max-width:920px; margin:0 auto;
+  padding:0 24px;
+  text-align:center;
+}
+.foot-made{
+  font-family:'Fraunces',Georgia,serif;
+  font-style:italic;
+  font-size:22px;
+  color:var(--mint);
+  margin:0 0 36px;
+  font-weight:500;
+}
+.foot-made .yerba{
+  display:inline-block;
+  font-style:normal;
+  filter:drop-shadow(0 0 12px rgba(61,255,176,0.5));
+  animation:yerba-spin 5s ease-in-out infinite;
+  transform-origin:50% 50%;
+}
+@keyframes yerba-spin{
+  0%,100%{transform:rotate(0deg) scale(1)}
+  25%{transform:rotate(-8deg) scale(1.05)}
+  75%{transform:rotate(8deg) scale(1.05)}
+}
+.foot-grid{
+  display:flex; flex-direction:column; gap:24px;
+  align-items:center;
+  padding:28px 0;
+  border-top:1px solid var(--border-soft);
+  border-bottom:1px solid var(--border-soft);
+  margin-bottom:24px;
+}
+@media(min-width:768px){
+  .foot-grid{flex-direction:row;justify-content:space-between;align-items:flex-start;text-align:left;}
+}
+.foot-brand-mark{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px; font-weight:700;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--ink);
+  display:inline-flex; align-items:center; gap:10px;
+}
+.foot-brand-mark .dot{
+  display:inline-block; width:8px; height:8px;
+  background:var(--mint); border-radius:50%;
+  box-shadow:0 0 10px var(--mint-glow);
+}
+.foot-tag{
+  font-size:14px; color:var(--ink-mute); margin:12px 0 0;
+  max-width:34ch;
+}
+.foot-links{
+  display:flex; flex-wrap:wrap; gap:20px;
+}
+.foot-links a{
+  color:var(--ink-mute);
+  font-size:14px;
+  text-decoration:none;
+  font-family:'JetBrains Mono',monospace;
+  transition:color .2s;
+}
+.foot-links a:hover{color:var(--mint);}
+.foot-copy{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px; color:var(--ink-faint); margin:0 auto;
+  letter-spacing:0.04em;
+  text-align:center;
+  white-space:nowrap;
+}
+
+/* ============ ENHANCED CTA ANIMATIONS ============ */
+/* Pulsing glow ring on primary CTAs */
+.cta-mint{
+  position:relative;
+  animation:cta-glow 2.4s ease-in-out infinite;
+}
+@keyframes cta-glow{
+  0%,100%{box-shadow:
+    0 0 0 1px rgba(61,255,176,0.4),
+    0 10px 30px -8px rgba(61,255,176,0.35),
+    0 0 40px -10px rgba(61,255,176,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.4);}
+  50%{box-shadow:
+    0 0 0 2px rgba(61,255,176,0.7),
+    0 14px 36px -6px rgba(61,255,176,0.55),
+    0 0 70px -5px rgba(61,255,176,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.5);}
+}
+/* Faster, more obvious shine sweep on hover */
+.cta-mint::after{
+  width:40%;
+  animation-duration:2.4s;
+}
+.cta-mint:hover::after{animation-duration:.8s;}
+
+/* Form submit gets same enhanced animation */
+.optin-native .ft-form-btn{
+  position:relative;
+  animation:cta-glow 2.4s ease-in-out infinite;
+}
+.optin-native .ft-form-btn::after{
+  content:""; position:absolute; top:0; bottom:0; left:-40%;
+  width:30%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);
+  transform:skewX(-18deg); animation:shine 2.4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* Subtle shimmer on the gradient text */
+.gradient-text{
+  background-size:200% 100%;
+  animation:text-shimmer 6s ease-in-out infinite;
+}
+@keyframes text-shimmer{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+/* Heading reveal */
+@keyframes heading-in{
+  from{opacity:0;transform:translateY(20px);filter:blur(6px);}
+  to{opacity:1;transform:none;filter:blur(0);}
+}
+.h-display{animation:heading-in .8s cubic-bezier(.2,.7,.3,1) both;}
+.hero h1.h-display{animation-duration:1s;}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+  .env-stack .env-card{animation:none !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- (Parallax handled via background-attachment:fixed on sections.) -->
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <!-- LEFT: copy + form -->
+    <div class="hero-copy">
+      <p class="eyebrow">Free. And It Works The Hours You Don't.</p>
+      <h1 class="h-display">Open Your Laptop To Work That's <span class="gradient-text">Already Been Done For You</span></h1>
+      <p class="lead">The Magic Inbox is an assistant with an email address of its own. You forward it the jobs buried in your inbox and it works through them while you're doing something else. Here's the whole setup, free, in about twenty minutes.</p>
+      <ul class="hero-proof">
+        <li>Replies Drafted.</li>
+        <li>Receipts Filed.</li>
+        <li>Follow-Ups Chased.</li>
+        <li>Before You Sat Down.</li>
+      </ul>
+
+      <!-- Opt-in form -->
+      <div id="optin-form" class="optin optin-native">
+        <p class="optin-cta">
+          <strong>Get Free Access Now</strong>
+          <span>The full Magic Inbox setup, sent to your inbox.</span>
+        </p>
+        <div class="gjs-ft-row">
+          <div class="gjs-ft-column gjs-ft-col-md">
+            <div class="ft_com_div ft_com_box">
+              <form id="flexiForm_64475" data-formid="flexiForm_64475" data-droptype="form" class="flexi-form flexi-vform-box ff-orderform-theme">
+                <div class="flexi-form-inner">
+                  <div class="ft-input-groups"><div class="ft-input-group ft-vinput-box"><label class="ft-input-label d-none"></label><div type="email" class="ft-input-block"><input type="email" name="email" placeholder="Email ID" required="true" class="ft-input-height ft-form-ctl ft-input-vstyle"></div></div></div>
+                  <div class="ft_as_com_div ft-com-btnstyle">
+                    <a data-formid="flexiForm_64475" data-smsg="Your details were submitted successfully" data-formmode="ft-flexi" data-ftbuttontype="1" href="#submit" class="ft-form-btn ft-btn-vstyle" data-nextgo="https://go.cowritingwithai.com/magic-inbox-thank-you" data-target="_self">
+                      <span class="ffbtnmaintxt">
+                        <span class="ffbtntxt">Submit</span>
+                      </span>
+                      <span class="ffbtnsubtxt"> </span>
+                    </a>
+                  </div>
+                </div>
+              </form>
+              <form id="flexiForm_64475_encharge" data-formid="flexiForm_64475" data-droptype="form" class="flexi-form flexi-vform-box ff-orderform-theme ff-hidden-encharge" aria-hidden="true" tabindex="-1">
+                <div class="flexi-form-inner">
+                  <div class="ft-input-groups"><div class="ft-input-group ft-vinput-box"><div type="email" class="ft-input-block"><input type="email" name="email" tabindex="-1" aria-hidden="true"></div></div></div>
+                  <div class="ft_as_com_div ft-com-btnstyle">
+                    <a data-formid="flexiForm_64475" data-formmode="ft-flexi" data-ftbuttontype="1" href="#submit" class="ft-form-btn ft-btn-vstyle" tabindex="-1" aria-hidden="true" data-nextgo="https://go.cowritingwithai.com/magic-inbox-thank-you" data-target="_self">
+                      <span class="ffbtnmaintxt"><span class="ffbtntxt">Submit</span></span>
+                      <span class="ffbtnsubtxt"> </span>
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <p class="micro">Your email stays private and you can leave whenever you want.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: hero product image -->
+    <div class="hero-product">
+      <div class="hero-product-glow"></div>
+      <img src="./imgs/hero-product.png" alt="Magic Inbox — The Complete Guide, your AI email assistant" class="hero-product-img" loading="eager" decoding="async" onerror="this.parentElement.style.display='none'">
+    </div>
+  </div>
+</header>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 2 ===================== -->
+<section id="s2">
+  <div class="wrap split split-reverse">
+    <div class="fade-up">
+      <h2 class="h-display">I Gave My Assistant An <span class="gradient-text">Email Address</span> And It <span class="serif-accent">Stole My Job</span></h2>
+      <p>I hated that job. The pay was shit, on account of it being me doing it for free at eleven at night. And I wasn't any good at it.</p>
+      <p>Here's what the job actually was.</p>
+      <p><strong>Every inbox is a to-do list you didn't write.</strong> Most of what's sitting in yours is a task wearing a sender's name. Book the thing. Pay the invoice. Answer the question. Find the file. Chase the person who went quiet on you.</p>
+      <p>So you sort the list instead of working it. Emails that need nothing from you get archived. Emails that need something get snoozed, because not right now. A few get done, whichever ones you could stand that day.</p>
+      <p id="g2-trigger">Tomorrow the snoozed emails are back, in exactly the state you left them. And they brought friends.</p>
+      <p><strong>So I stopped doing it.</strong> My AI assistant has its own email address now. I forward it the emails I'd have snoozed, and they start getting done automatically.</p>
+    </div>
+    <div class="illust-stack illust-stack-sticky fade-up">
+      <div class="env-stack">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring r2"></div>
+        <div class="pulse-ring r3"></div>
+        <div class="env-card c1"><div class="lines"><span></span><span></span><span></span></div></div>
+        <div class="env-card c2"><div class="lines"><span></span><span></span><span></span></div></div>
+        <div class="env-card c3"><div class="lines"><span></span><span></span><span></span></div></div>
+        <div class="env-card c4"><div class="lines"><span></span><span></span><span></span></div></div>
+        <div class="env-card c5"><div class="lines"><span></span><span></span><span></span></div></div>
+      </div>
+    </div>
+    <div class="pull">
+      <p class="pull-quote">Sorting A To-Do List Finishes None Of It. It Only Decides The Order You Get To Feel Bad In.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 3 ===================== -->
+<section id="s3" class="tasks-section">
+  <div class="wrap">
+    <div class="fade-up">
+      <h2 class="h-display">The Tasks You Keep Putting Off. <span class="gradient-text">None Of Them Are Yours Anymore.</span></h2>
+    </div>
+    <div class="panel">
+      <ul class="tasks">
+        <li>
+          <div class="marker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="t">The quote you sent three weeks ago gets chased, so it stops being money you never collected</span>
+        </li>
+        <li>
+          <div class="marker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="t">The buyer who can't find their login gets working access and a written reply, before they email you a second time</span>
+        </li>
+        <li>
+          <div class="marker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="t">Every "I'll have that to you by Friday" you send comes back as a reminder on Thursday</span>
+        </li>
+        <li>
+          <div class="marker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="t">Your client's new requirement goes into that client's brief, instead of staying buried four replies deep</span>
+        </li>
+        <li>
+          <div class="marker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="t">The receipt gets filed with its vendor, amount and date, so tax season stops being an archaeology dig</span>
+        </li>
+      </ul>
+    </div>
+    <div class="fade-up">
+      <p><strong>And that's just five tasks off your list. The Magic Inbox takes dozens more, and the best ones are the ones you invent yourself.</strong></p>
+      <p><strong>Adding one of your own takes a sentence.</strong> Tell it how to handle that kind of email once, and it handles it from then on.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 4 ===================== -->
+<section id="s4">
+  <div class="wrap split split-receipt">
+    <div class="fade-up">
+      <h2 class="h-display">You Are The <span class="gradient-text">Most Expensive Assistant</span> You Will Ever Employ</h2>
+      <p>Work out roughly what an hour of your time is worth. Then think about what you spent last night doing. Copying an address out of a confirmation email. Hunting for a receipt. Writing a reply you'd already written twice this month.</p>
+      <p>The worse version is the one where you don't do it at all, and it sits there until doing it stops being an option. The quote goes cold. The trial charges you. The buyer gives up and asks for a refund instead.</p>
+      <p>That's the bill. It arrives as tiredness rather than an invoice, which is why nobody ever adds it up.</p>
+      <button class="cta-mint" type="button" data-scroll-to-form>Give Me My Magic Inbox <svg class="rev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <p class="micro" style="margin-top:14px;">Free. About twenty minutes. Your email stays private and you can leave whenever you want.</p>
+    </div>
+    <div class="illust-receipt fade-up">
+      <div class="receipt">
+        <span class="label">Your Time — Last Night</span>
+        <div class="item"><span>Copying an address</span><span>14 min</span></div>
+        <div class="item"><span>Hunting a receipt</span><span>22 min</span></div>
+        <div class="item"><span>Rewriting a reply</span><span>18 min</span></div>
+        <div class="item"><span>Chasing a follow-up</span><span>11 min</span></div>
+        <div class="item"><span>Snoozing, again</span><span>9 min</span></div>
+        <div class="total"><span>TOTAL</span><span>one evening</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 5 ===================== -->
+<section id="s5">
+  <div class="wrap">
+    <div class="fade-up">
+      <h2 class="h-display">Plus: <span class="gradient-text">Five Moves Nobody On The Other End Can See</span></h2>
+    </div>
+    <div class="inline-art fade-up">
+      <div class="email-mock">
+        <div class="head">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        </div>
+        <div class="from">
+          <div class="who">Re: Project brief</div>
+          <div class="sub">to client@co.com</div>
+        </div>
+        <div class="body">Here's the updated brief — let me know if anything needs adjusting before Thursday.</div>
+        <div class="bcc">BCC → assistant@magic</div>
+      </div>
+      <div class="inline-copy">
+        <p>BCC your assistant instead of forwarding. Blind copy, so the person you wrote to never sees it was there, and it goes to work anyway.</p>
+        <p>That Thursday reminder is the one to start with. The person waiting never learns you needed reminding. They just think you're somebody who always delivers.</p>
+        <p>The other four come with the setup, on top of what you came here for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 6 ===================== -->
+<section id="s6">
+  <div class="wrap notes-grid">
+    <div class="fade-up">
+      <p><strong>If you're on Substack,</strong> your subscriber list lives inside Substack, and the only way to get it out is exporting the whole thing by hand. Your assistant reads the notification Substack sends you and adds each new subscriber, as they arrive, to a separate marketing list you own in Kit or Mailchimp. That's where your promotions go, instead of into your publication.</p>
+      <p><strong>Some of it happens out in the real world.</strong> I forwarded my assistant an email about a limited screening of a movie I wanted to see, and it came back with two tickets. Best seats in the house. All it cost me was forwarding the email.</p>
+    </div>
+    <div class="task-panel fade-up" aria-hidden="false">
+      <div class="tp-head"><span class="pulse"></span>Magic Inbox · Live</div>
+      <div class="tp-row">
+        <div class="tp-from">
+          <div class="tp-avatar">S</div>
+          <div>
+            <div class="who">Substack</div>
+            <div class="sub">New subscriber · sarah@gmail</div>
+          </div>
+        </div>
+        <svg class="tp-arrow" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 L23 9"/><path d="M17 3 L25 9 L17 15"/></svg>
+        <span class="tp-result"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Your list</span>
+      </div>
+      <div class="tp-row">
+        <div class="tp-from">
+          <div class="tp-avatar alt">C</div>
+          <div>
+            <div class="who">Cinema Centro</div>
+            <div class="sub">Limited screening · Sat 9pm</div>
+          </div>
+        </div>
+        <svg class="tp-arrow" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 L23 9"/><path d="M17 3 L25 9 L17 15"/></svg>
+        <span class="tp-result"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>2 tickets</span>
+      </div>
+      <div class="tp-row">
+        <div class="tp-from">
+          <div class="tp-avatar alt2">A</div>
+          <div>
+            <div class="who">Adobe</div>
+            <div class="sub">Receipt · $29.99 · Aug 12</div>
+          </div>
+        </div>
+        <svg class="tp-arrow" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 L23 9"/><path d="M17 3 L25 9 L17 15"/></svg>
+        <span class="tp-result"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Filed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 7 ===================== -->
+<section id="s7" class="close">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5;" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M1096 60l5 12 12 5-12 5-5 12-5-12-12-5 12-5Z" fill="#3DFFB0"/>
+    <path d="M120 90l3 8 8 3-8 3-3 8-3-8-8-3 8-3Z" fill="#7CFFC8"/>
+    <path d="M340 60l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5Z" fill="#3DFFB0"/>
+    <path d="M940 470l3 8 8 3-8 3-3 8-3-8-8-3 8-3Z" fill="#7CFFC8"/>
+    <path d="M180 480l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5Z" fill="#3DFFB0"/>
+    <path d="M700 40l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2Z" fill="#7CFFC8"/>
+  </svg>
+  <div class="wrap fade-up">
+    <h2 class="h-display">Wake Up To <span class="gradient-text">Work You Didn't Have To Do</span></h2>
+    <p class="sub">Twenty minutes tonight is the whole cost. Put your email in the box and the entire setup comes to you, free. The paste blocks, the filters, the playbook, and the moves nobody on the other end can see.</p>
+    <button class="cta-mint" type="button" data-scroll-to-form>Give Me My Magic Inbox <svg class="rev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <div class="micro-stars">
+      <span class="micro-star" aria-hidden="true">✦</span>
+      <p class="micro">Your email stays private and you can leave whenever you want.</p>
+      <span class="micro-star" aria-hidden="true">✦</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 8 ===================== -->
+<section id="s8">
+  <div class="wrap">
+    <div class="byline fade-up">
+      <div class="avatar-panel">
+        <img src="./imgs/avatar.webp" alt="Nick Quick" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="byline-body">
+        <p>I'm Nick Quick. I write and publish my own work, and I run marketing campaigns for people who'd rather not run theirs.</p>
+        <p>I do it from Asunción, Paraguay, where the correct way to spend an afternoon is a shaded bench and a guampa of cold tereré.</p>
+        <p>Two decades in, I can tell you the work was never the problem. It was everything stacked around the work.</p>
+        <p>So I hired something to take that part.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ===================== SECTION 9 ===================== -->
+<section id="s9" class="nudge">
+  <div class="wrap fade-up">
+    <h2 class="h-display">Now Go <span class="gradient-text">Hire Yours</span></h2>
+    <p class="sub">Twenty minutes tonight, and an email address is the whole price.</p>
+    <button class="cta-mint" type="button" data-scroll-to-form>Give Me My Magic Inbox <svg class="rev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <div class="micro-stars">
+      <span class="micro-star" aria-hidden="true">✦</span>
+      <p class="micro">Your email stays private and you can leave whenever you want.</p>
+      <span class="micro-star" aria-hidden="true">✦</span>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-card">
+    <p class="foot-made">Made with <span class="yerba">🧉</span> in Paraguay</p>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="foot-brand-mark"><span class="dot"></span>Co-Write With AI</span>
+        <p class="foot-tag">Field notes on handing the boring parts of your inbox to something that doesn't mind.</p>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+    <p class="foot-copy">© <span id="year">2026</span> Co-Write With AI · All rights reserved · Asunción, Paraguay</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var form = document.getElementById('optin-form');
+  var emailField = form && form.querySelector('input[type="email"]');
+  var submitLabel = form && form.querySelector('.ffbtntxt');
+  if (emailField) emailField.placeholder = 'Your email address';
+  if (submitLabel) submitLabel.textContent = 'Get Free Access';
+
+  // Sync visible email into hidden Encharge helper on submit (preserved from live page)
+  var visibleForm = document.getElementById('flexiForm_64475');
+  var helperForm = document.getElementById('flexiForm_64475_encharge');
+  if (visibleForm && helperForm) {
+    var submitBtn = visibleForm.querySelector('.ft-form-btn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function(){
+        var visibleEmail = visibleForm.querySelector('input[type="email"]');
+        var helperEmail = helperForm.querySelector('input[type="email"]');
+        if (visibleEmail && helperEmail) helperEmail.value = visibleEmail.value;
+      }, true);
+    }
+  }
+
+  // Scroll-to-form CTA handlers (preserved behavior)
+  Array.prototype.forEach.call(document.querySelectorAll('[data-scroll-to-form]'), function(btn){
+    btn.addEventListener('click', function(){
+      form.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
+      window.setTimeout(function(){
+        var firstField = form.querySelector('input, select, textarea, button');
+        if (firstField) firstField.focus({preventScroll:true});
+      }, reduce ? 0 : 500);
+    });
+  });
+
+  // Enter-key submit (preserved from live page)
+  function wireEnterToSubmit(){
+    var vf = document.getElementById('flexiForm_64475');
+    if (!vf) return false;
+    var emailInput = vf.querySelector('input[type="email"]');
+    var submitBtn = vf.querySelector('.ft-form-btn, [data-ftbuttontype]');
+    if (!emailInput || !submitBtn) return false;
+    if (emailInput.dataset.ffEnterWired === '1') return true;
+    emailInput.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.keyCode === 13) { ev.preventDefault(); submitBtn.click(); }
+    });
+    vf.addEventListener('submit', function(ev){ ev.preventDefault(); submitBtn.click(); });
+    emailInput.dataset.ffEnterWired = '1';
+    return true;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wireEnterToSubmit);
+  } else {
+    wireEnterToSubmit();
+  }
+  setTimeout(wireEnterToSubmit, 250);
+
+  // Fade-up reveal — content is always visible by default; this is just a nicety.
+  if (!reduce && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {threshold:0.08});
+    document.querySelectorAll('.fade-up').forEach(function(el){ io.observe(el); });
+  }
+
+  // ============ PARALLAX SCROLL ============
+// Subtle, lightweight: floating icons gently bob (CSS animation handles it);
+// section background gradients use background-attachment:fixed for the parallax.
+  // No JS needed for this approach.
+
+  // ============ SET COPYRIGHT YEAR ============
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
