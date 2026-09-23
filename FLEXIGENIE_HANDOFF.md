@@ -10,6 +10,11 @@ Everything you need to paste into **FlexiGenie** (FlexiFunnels' AI page builder)
 
 ## 1. The Prompt to Paste into FlexiGenie
 
+**Before pasting:** upload `imgs/hero-product.png` and `imgs/avatar.webp` to
+your FlexiFunnels media library. The prompt below assumes those are
+already in the library — replace `[HERO_IMAGE_URL]` and `[AVATAR_IMAGE_URL]`
+with the URLs FlexiFunnels gives you after upload.
+
 Copy everything between the fences below and paste it as the first message to FlexiGenie. Adjust the `[bracketed]` placeholders for your setup.
 
 ````
@@ -79,11 +84,41 @@ What you should NOT do
   • Don't introduce an external image for the hero — the supplied
     hero-product.png (1122×1402 transparent BG) is the centerpiece.
 
+  • Hero product image: [HERO_IMAGE_URL]  ← upload `imgs/hero-product.png`
+  • Avatar (section 8): [AVATAR_IMAGE_URL]  ← upload `imgs/avatar.webp`
+
+(Reference paths in the source repo, in case you need to verify the
+files match the design: `imgs/hero-product.png` and `imgs/avatar.webp`
+in https://github.com/heynickquick/magic-inbox-lander)
+
 Asset URLs
 ==========
-  • Hero product image: ./imgs/hero-product.png (uploaded as a page
-    asset; reference via FlexiFunnels' asset URL).
-  • Avatar (byline section, section 8): ./imgs/avatar.webp.
+Two binary image files MUST be uploaded to FlexiFunnels' media library
+BEFORE you start the FlexiGenie session, because the prompt references them
+and FlexiGenie needs an actual image to use, not a path:
+
+  1. Hero product image — `imgs/hero-product.png` from this repo
+     (1122×1402, transparent BG, ~1.7 MB). Upload it; reference it in
+     the hero right column with the caption "Magic Inbox — The Complete
+     Guide, your AI email assistant". Max display width 440px desktop,
+     hidden below 960px viewport.
+
+  2. Avatar (byline section, section 8) — `imgs/avatar.webp` from
+     this repo. Upload it; reference it in section 8 inside a 130px
+     circular frame with mint gradient border.
+
+The logo (`imgs/logo.png`) is preserved in this repo for your other uses
+but is NOT used on this page — do not add it to the FlexiFunnels build.
+
+Visual reference while FlexiGenie works
+=======================================
+Point FlexiGenie at the live URL so it can scrape the actual visual:
+
+  https://sa7m8wqkf3ehs.space.minimax.io
+
+Tell it: "Open this URL, study the rendered design, then rebuild it
+section-by-section using the spec in §2, §3, §4 of the conversation
+context above." FlexiGenie has browser tools — let it look.
 
 Output
 ======
